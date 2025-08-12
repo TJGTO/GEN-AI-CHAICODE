@@ -44,8 +44,7 @@ Length 5: "hello"
 Output : [14]
 
 ** Encoding "hello world" **
-
-<span style="color: orange; font-weight: bold;">hello is already present</span>
+hello is already present
 
 Length 1: "w", "o", "r", "l", "d"
 Length 2: "wo", "or", "rl", "ld"
@@ -54,3 +53,53 @@ Length 4: "worl", "orld"
 Length 5: "world"
 
 Output : [14, 27]
+
+---
+
+## API Usage
+
+### 1. Encode Text
+
+**URL:**  
+`POST /encode`
+
+**Request Body:**
+
+```json
+{
+  "text": "hello world"
+}
+```
+
+**Response:**
+
+```json
+{
+  "ids": [14, 27]
+}
+```
+
+---
+
+### 2. Decode IDs
+
+**URL:**  
+`POST /decode`
+
+**Request Body:**
+
+```json
+{
+  "ids": [14, 27]
+}
+```
+
+**Response:**
+
+```json
+{
+  "text": "hello world"
+}
+```
+
+---
