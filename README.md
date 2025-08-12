@@ -15,44 +15,93 @@ The tokenizer is **stateful** — once it learns a token, it remembers it for al
 
 ## How It Works
 
-**Encoding a word**  
- When you call:
+### Encoding a Word
+
+When you call:
+
+```js
 tokenizer.encode("hello");
-All Substrings are
-Length 1: "h", "e", "l", "o"
-Length 2: "he", "el", "ll", "lo"
-Length 3: "hel", "ell", "llo"
-Length 4: "hell", "ello"
-Length 5: "hello"
+```
 
-    Our Map Storage Would be
-    1: "h"
-    2: "e"
-    3: "l"
-    4: "o"
-    5: "he"
-    6: "el"
-    7: "ll"
-    8: "lo"
-    9: "hel"
-    10: "ell"
-    11: "llo"
-    12: "hell"
-    13: "ello"
-    14: "hello"
+All substrings are generated:
 
-Output : [14]
+- Length 1: `"h"`, `"e"`, `"l"`, `"o"`
+- Length 2: `"he"`, `"el"`, `"ll"`, `"lo"`
+- Length 3: `"hel"`, `"ell"`, `"llo"`
+- Length 4: `"hell"`, `"ello"`
+- Length 5: `"hello"`
 
-** Encoding "hello world" **
-hello is already present
+**Map Storage After "hello":**
+| ID | Token |
+|-----|---------|
+| 0 | h |
+| 1 | e |
+| 2 | l |
+| 3 | o |
+| 4 | he |
+| 5 | el |
+| 6 | ll |
+| 7 | lo |
+| 8 | hel |
+| 9 | ell |
+| 10 | llo |
+| 11 | hell |
+| 12 | ello |
+| 13 | hello |
 
-Length 1: "w", "o", "r", "l", "d"
-Length 2: "wo", "or", "rl", "ld"
-Length 3: "wor", "orl", "rld"
-Length 4: "worl", "orld"
-Length 5: "world"
+**Output:**  
+`[13]`
 
-Output : [14, 27]
+---
+
+### Encoding "hello world"
+
+- `"hello"` is already present, so only substrings of `"world"` are added.
+
+Substrings for `"world"`:
+
+- Length 1: `"w"`, `"o"`, `"r"`, `"l"`, `"d"`
+- Length 2: `"wo"`, `"or"`, `"rl"`, `"ld"`
+- Length 3: `"wor"`, `"orl"`, `"rld"`
+- Length 4: `"worl"`, `"orld"`
+- Length 5: `"world"`
+
+**Output:**  
+`[13, 26]`
+
+**Updated Memory Map After "hello world":**
+| ID | Token |
+|-----|---------|
+| 0 | h |
+| 1 | e |
+| 2 | l |
+| 3 | o |
+| 4 | he |
+| 5 | el |
+| 6 | ll |
+| 7 | lo |
+| 8 | hel |
+| 9 | ell |
+| 10 | llo |
+| 11 | hell |
+| 12 | ello |
+| 13 | hello |
+| 14 | w |
+| 15 | r |
+| 16 | d |
+| 17 | wo |
+| 18 | or |
+| 19 | rl |
+| 20 | ld |
+| 21 | wor |
+| 22 | orl |
+| 23 | rld |
+| 24 | worl |
+| 25 | orld |
+| 26 | world |
+
+> **Note:**  
+> `"o"` and `"l"` are reused from the previous map and not duplicated.
 
 ---
 
@@ -75,7 +124,7 @@ Output : [14, 27]
 
 ```json
 {
-  "ids": [14, 27]
+  "ids": [13, 26]
 }
 ```
 
@@ -90,7 +139,7 @@ Output : [14, 27]
 
 ```json
 {
-  "ids": [14, 27]
+  "ids": [13, 26]
 }
 ```
 
