@@ -1,5 +1,7 @@
 # 🤖 Persona AI Chat
 
+APP URL : https://personaai2025.netlify.app/persona
+
 **Revolutionary AI companions with authentic personalities - Chat with your favorite tech educators**
 ![alt text](image.png)
 
