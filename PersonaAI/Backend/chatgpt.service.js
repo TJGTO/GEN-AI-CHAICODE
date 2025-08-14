@@ -1,9 +1,10 @@
 import OpenAI from "openai";
 import dotenv from "dotenv";
+import { transscript as hiteshtranscript } from "./hitesh.js"; // Importing the transcript for Hitesh's style
+import { transscript as piyushtranscript } from "./piyujsh.js"; // Importing the transcript for Piyush's style
 
 dotenv.config();
 
-console.log("OpenAI API Key:", process.env.HEY_KEY);
 const openai = new OpenAI({
   apiKey: process.env.HEY_KEY,
 });
@@ -26,4 +27,21 @@ export async function getChatCompletion(message) {
     console.error("Error in ChatGPT Service:", error);
     throw error;
   }
+}
+
+export async function chatWithPersona(userMessage, personaId) {
+  console.log("personaId", personaId);
+  const transcript = personaId === "1" ? hiteshtranscript : piyushtranscript;
+  const completion = await openai.chat.completions.create({
+    model: "gpt-4o-mini",
+    messages: [
+      {
+        role: "system",
+        content: [{ type: "text", text: transcript }],
+      },
+      { role: "user", content: [{ type: "text", text: userMessage }] },
+    ],
+  });
+
+  return completion.choices[0].message.content;
 }

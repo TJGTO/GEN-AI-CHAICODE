@@ -9,9 +9,7 @@ const ChatUI = () => {
   const userId = searchParams.get("id") || "1";
   const user = users.find((u) => u.id === userId) || users[0];
 
-  const [messages, setMessages] = useState([
-    { sender: "persona", text: "Hello! How can I help you today?" },
-  ]);
+  const [messages, setMessages] = useState<Array<any>>([]);
   const [input, setInput] = useState("");
   const chatRef = useRef<HTMLDivElement>(null);
 
@@ -21,10 +19,47 @@ const ChatUI = () => {
     }
   }, [messages]);
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (input.trim()) {
-      setMessages([...messages, { sender: "user", text: input }]);
+      const userMessage = input;
+
+      setMessages((prev) => [...prev, { sender: "user", text: userMessage }]);
       setInput("");
+
+      try {
+        const typingId = Date.now();
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: typingId,
+            sender: "persona",
+            text: "Typing...",
+            isTyping: true,
+          },
+        ]);
+
+        const res = await fetch("https://personaai-three.vercel.app/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: userMessage, personaId: userId }),
+        });
+
+        const data = await res.json();
+
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.id === typingId
+              ? {
+                  id: Date.now(),
+                  sender: "persona",
+                  text: data.reply || "Backend Problem Hai Talk to You Later",
+                }
+              : msg
+          )
+        );
+      } catch (err) {
+        console.error("Error calling chat API:", err);
+      }
     }
   };
 
@@ -46,13 +81,18 @@ const ChatUI = () => {
           />
           <div>
             <div className="text-xl font-bold text-[#fafafa]">{user.name}</div>
-            <div className="text-sm text-[#b3b3b3]">{user.description}</div>
+            <div className="text-sm text-[#b3b3b3]">{user.personStatus}</div>
+            <div className="flex items-center gap-1 mt-1">
+              <span className="w-2.5 h-2.5 bg-green-500 rounded-full"></span>
+              <span className="text-xs text-green-400 font-medium">Online</span>
+            </div>
           </div>
         </div>
+
         {/* Chat Section */}
         <div
           ref={chatRef}
-          className="flex-1 overflow-y-auto py-6 flex flex-col gap-4"
+          className="flex-1 overflow-y-auto py-6 flex flex-col gap-4 scrollbar-hide p-4"
         >
           {messages.map((msg, idx) => (
             <div
@@ -67,6 +107,7 @@ const ChatUI = () => {
             </div>
           ))}
         </div>
+
         {/* Footer */}
         <div className="pt-6 border-t border-[#23232a] flex items-center gap-2 bg-[#18181b]">
           <input
