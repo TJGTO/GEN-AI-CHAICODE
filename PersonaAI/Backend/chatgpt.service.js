@@ -12,7 +12,7 @@ const openai = new OpenAI({
 export async function getChatCompletion(message) {
   try {
     const response = await openai.chat.completions.create({
-      model: "gpt-4o-mini", // or "gpt-3.5-turbo"
+      model: "gpt-5-mini", // or "gpt-3.5-turbo"
       messages: [
         {
           role: "system",
