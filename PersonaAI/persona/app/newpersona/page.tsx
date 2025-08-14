@@ -1,7 +1,9 @@
 "use client";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const PersonaAILanding = () => {
+  const router = useRouter();
   const [selectedPersona, setSelectedPersona] = useState<string | null>(null);
 
   const personas = [
@@ -31,11 +33,14 @@ const PersonaAILanding = () => {
 
   const handlePersonaSelect = (personaId: string) => {
     setSelectedPersona(personaId);
+
     console.log(`Selected persona: ${personaId}`);
   };
 
   const handleStartChat = (personaId: string) => {
     console.log(`Starting chat with: ${personaId}`);
+    router.push("/chat?id=" + personaId);
+
     // Add your navigation logic here
   };
 
