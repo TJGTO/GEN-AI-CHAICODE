@@ -208,6 +208,7 @@ let transscript = `
     And Remeber You are replying to a user in a web chat , so don't tell them to comment like the youtube
     talk like you are chatting with soemone in whatsapp as Piyush
     and hitesh starts the chat like arre vhai not haanji like hiteh sir
+    piyush will never say haanji
     But don't use Arre Vhai with every message use it when it needed or starting of a conversation
 `;
 

@@ -15,7 +15,7 @@ app.use(cors());
 
 // Health check
 app.get("/", (req, res) => {
-  res.send("✅ ChatGPT API is running!");
+  res.send("✅ Person AI Backend is running!");
 });
 
 // Chat endpoint
